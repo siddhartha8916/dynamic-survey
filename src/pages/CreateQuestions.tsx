@@ -169,6 +169,17 @@ const CreateQuestions: React.FC = () => {
     }
 
     setQuestions(newQuestions);
+    
+    // Also update the survey in localStorage immediately for better UX
+    if (survey) {
+      const updatedSurvey: Survey = {
+        ...survey,
+        questions: newQuestions,
+      };
+      setSurvey(updatedSurvey);
+      updateSurvey(updatedSurvey);
+    }
+    
     closeModal();
   };
 
@@ -179,13 +190,34 @@ const CreateQuestions: React.FC = () => {
       id: Date.now(),
       text: `${question.text} (Copy)`,
     };
-    setQuestions([...questions, duplicate]);
+    const newQuestions = [...questions, duplicate];
+    setQuestions(newQuestions);
+    
+    // Update survey in localStorage immediately
+    if (survey) {
+      const updatedSurvey: Survey = {
+        ...survey,
+        questions: newQuestions,
+      };
+      setSurvey(updatedSurvey);
+      updateSurvey(updatedSurvey);
+    }
   };
 
   const deleteQuestion = (index: number) => {
     if (window.confirm('Are you sure you want to delete this question?')) {
       const newQuestions = questions.filter((_, i) => i !== index);
       setQuestions(newQuestions);
+      
+      // Update survey in localStorage immediately
+      if (survey) {
+        const updatedSurvey: Survey = {
+          ...survey,
+          questions: newQuestions,
+        };
+        setSurvey(updatedSurvey);
+        updateSurvey(updatedSurvey);
+      }
     }
   };
 
