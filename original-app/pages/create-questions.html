@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Survey Questions</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom tailwind config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2B4652',     // Dark blue
+                        'secondary': '#90A4AD',   // Light blue-gray
+                        'light': '#EBEBEB',       // Light gray
+                        'dark': '#0D0D0D',        // Almost black
+                        'medium': '#575757',      // Medium gray
+                        'accent': '#FFD649',      // Yellow accent
+                    },
+                    fontFamily: {
+                        'sans': ['DM Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- Boxicons for icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body class="bg-light min-h-screen flex flex-col">
+    <!-- Mobile Navigation Header -->
+    <nav class="lg:hidden bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-30">
+        <div class="px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="text-medium p-2 rounded-lg hover:bg-light">
+                    <i class='bx bx-arrow-back text-2xl'></i>
+                </a>
+                <h1 class="text-xl font-bold text-primary ml-2">Create Questions</h1>
+            </div>
+            <div>
+                <span id="mobileSurveyTitle" class="text-medium text-sm"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Top Navigation -->
+    <nav class="hidden lg:flex justify-between items-center bg-white px-6 py-4 shadow-sm border-b border-gray-100">
+        <div class="flex items-center">
+            <a href="../index.html" class="p-2 rounded-lg hover:bg-light text-medium mr-2">
+                <i class='bx bx-arrow-back text-2xl'></i>
+            </a>
+            <h2 class="text-xl font-bold text-primary">Create Survey Questions</h2>
+        </div>
+        <div class="flex items-center gap-2">
+            <span id="surveyTitle" class="text-medium mr-4"></span>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="lg:pt-0 pt-16 min-h-screen">
+        <div class="p-6 max-w-5xl mx-auto">
+        <!-- Question list -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
+                <div>
+                    <h2 class="text-xl font-bold text-primary">Questions</h2>
+                    <p class="text-medium text-sm mt-1">Add questions to your survey</p>
+                </div>
+                <div>
+                    <button id="addQuestionBtn" class="bg-primary text-light px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 transition flex items-center">
+                        <i class='bx bx-plus mr-2'></i> Add Question
+                    </button>
+                </div>
+            </div>
+
+            <!-- Questions container -->
+            <div id="questionsContainer" class="space-y-4">
+                <!-- Questions will be added here dynamically -->
+                <div class="border border-gray-100 rounded-lg p-5 bg-light">
+                    <div class="flex justify-between mb-2">
+                        <h3 class="font-medium text-primary">No questions added yet</h3>
+                    </div>
+                    <p class="text-medium text-sm">Click "Add Question" to create your first question</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save survey button -->
+        <div class="flex justify-end">
+            <button id="saveSurveyBtn" class="bg-primary text-light px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition flex items-center">
+                <i class='bx bx-save mr-2'></i> Save Survey
+            </button>
+        </div>
+        </div>
+    </main>
+
+    <!-- Add Question Modal -->
+    <div id="addQuestionModal" class="fixed inset-0 bg-dark bg-opacity-50 hidden z-50">
+        <div class="fixed inset-0 flex items-center justify-center p-4">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl p-6 overflow-y-auto max-h-[90vh]">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-primary">Add Question</h3>
+                <button id="closeQuestionModalBtn" class="text-medium hover:text-dark p-1">
+                    <i class='bx bx-x text-2xl'></i>
+                </button>
+            </div>
+            <form id="questionForm">
+                <div class="mb-5">
+                    <label for="questionText" class="block text-sm font-medium text-medium mb-1">Question Text</label>
+                    <input type="text" id="questionText" class="w-full px-4 py-3 border border-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Enter your question here">
+                </div>
+                <div class="mb-5">
+                    <label for="questionType" class="block text-sm font-medium text-medium mb-1">Question Type</label>
+                    <select id="questionType" class="w-full px-4 py-3 border border-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
+                        <option value="text">Text</option>
+                        <option value="number">Number</option>
+                        <option value="single">Single Select</option>
+                        <option value="multi">Multi Select</option>
+                    </select>
+                </div>
+
+                <!-- Options container (for single/multi select) -->
+                <div id="optionsContainer" class="mb-5 hidden">
+                    <label class="block text-sm font-medium text-medium mb-2">Options</label>
+                    <div id="optionsList" class="space-y-3">
+                        <div class="option-item flex items-center">
+                            <input type="text" class="option-input w-full px-4 py-3 border border-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Option 1">
+                            <button type="button" class="ml-2 text-red-500 hover:text-red-700 remove-option hidden p-1">
+                                <i class='bx bx-trash text-lg'></i>
+                            </button>
+                        </div>
+                        <div class="option-item flex items-center">
+                            <input type="text" class="option-input w-full px-4 py-3 border border-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" placeholder="Option 2">
+                            <button type="button" class="ml-2 text-red-500 hover:text-red-700 remove-option hidden p-1">
+                                <i class='bx bx-trash text-lg'></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" id="addOptionBtn" class="mt-3 text-primary hover:text-opacity-80 flex items-center text-sm font-medium">
+                        <i class='bx bx-plus mr-1'></i>
+                        Add Option
+                    </button>
+                </div>
+
+                <!-- Additional settings -->
+                <div class="mb-5">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="requiredQuestion" class="mr-2 h-4 w-4 accent-primary">
+                        <span class="text-sm text-medium">This question is required</span>
+                    </label>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="button" id="cancelQuestionBtn" class="px-5 py-3 text-medium hover:text-dark font-medium mr-3">Cancel</button>
+                    <button type="button" id="saveQuestionBtn" class="bg-primary text-light px-5 py-3 rounded-lg font-medium hover:bg-opacity-90 transition">Add Question</button>
+                </div>
+            </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../js/modal-helpers.js"></script>
+    <script src="../js/create-questions.js"></script>
+</body>
+</html>
