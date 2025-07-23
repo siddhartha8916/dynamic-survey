@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Details</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom tailwind config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#2B4652',     // Dark blue
+                        'secondary': '#90A4AD',   // Light blue-gray
+                        'light': '#EBEBEB',       // Light gray
+                        'dark': '#0D0D0D',        // Almost black
+                        'medium': '#575757',      // Medium gray
+                        'accent': '#FFD649',      // Yellow accent
+                    },
+                    fontFamily: {
+                        'sans': ['DM Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- Boxicons for icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body class="bg-light min-h-screen flex flex-col">
+    <!-- Mobile Navigation Header -->
+    <nav class="lg:hidden bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-30">
+        <div class="px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="../index.html" class="text-medium p-2 rounded-lg hover:bg-light">
+                    <i class='bx bx-arrow-back text-2xl'></i>
+                </a>
+                <h1 class="text-xl font-bold text-primary ml-2" id="surveyTitleHeader">Survey Details</h1>
+            </div>
+            <button id="editSurveyBtn" class="bg-primary text-light px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 transition flex items-center">
+                <i class='bx bx-edit mr-2'></i> Edit
+            </button>
+        </div>
+    </nav>
+
+    <!-- Top Navigation -->
+    <nav class="hidden lg:flex justify-between items-center bg-white px-6 py-4 shadow-sm border-b border-gray-100">
+        <div class="flex items-center">
+            <a href="../index.html" class="p-2 rounded-lg hover:bg-light text-medium mr-2">
+                <i class='bx bx-arrow-back text-2xl'></i>
+            </a>
+            <h2 class="text-xl font-bold text-primary" id="surveyTitleHeader">Survey Details</h2>
+        </div>
+        <div>
+            <button id="editSurveyBtn" class="bg-primary text-light px-5 py-3 rounded-lg font-medium hover:bg-opacity-90 transition flex items-center">
+                <i class='bx bx-edit mr-2'></i> Edit Survey
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="lg:pt-0 pt-16 min-h-screen">
+        <div class="p-6 max-w-6xl mx-auto">
+            <!-- Survey Info Card -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                <div class="mb-5">
+                    <h2 class="text-2xl font-bold text-primary mb-2" id="surveyTitle">Survey Title</h2>
+                    <p class="text-medium" id="surveyDescription">Survey description will appear here.</p>
+                </div>
+                <div class="flex flex-wrap gap-5">
+                    <div class="flex items-center">
+                        <i class='bx bx-calendar text-xl text-secondary mr-2'></i>
+                        <span class="text-medium" id="createdDate">Created: N/A</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class='bx bx-list-ul text-xl text-secondary mr-2'></i>
+                        <span class="text-medium" id="questionCount">0 Questions</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class='bx bx-message-square-detail text-xl text-secondary mr-2'></i>
+                        <span class="text-medium" id="responseCount">0 Responses</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class='bx bx-check-circle text-xl text-secondary mr-2'></i>
+                        <span class="text-sm font-medium rounded-full px-3 py-1" id="surveyStatus">Status</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="mb-6">
+                <div class="border-b border-gray-200">
+                    <nav class="flex -mb-px">
+                        <button class="tab-button mr-8 py-4 px-1 border-b-2 border-primary font-medium text-sm text-primary" data-tab="questions">
+                            Questions
+                        </button>
+                        <button class="tab-button mr-8 py-4 px-1 border-b-2 border-transparent font-medium text-sm text-medium hover:text-dark hover:border-secondary" data-tab="deployment">
+                            Deployment
+                        </button>
+                        <button class="tab-button mr-8 py-4 px-1 border-b-2 border-transparent font-medium text-sm text-medium hover:text-dark hover:border-secondary" data-tab="responses">
+                            Responses
+                        </button>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Questions Tab Content -->
+            <div id="questionsTab" class="tab-content">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-bold text-primary">Survey Questions</h3>
+                        <button id="addQuestionFromDetailsBtn" class="bg-primary text-light px-5 py-3 rounded-lg font-medium hover:bg-opacity-90 transition flex items-center">
+                            <i class='bx bx-plus mr-2'></i>
+                            Add Question
+                        </button>
+                    </div>
+                    
+                    <div id="questionsContainer" class="space-y-4">
+                        <!-- Questions will be loaded here dynamically -->
+                        <p class="text-medium">Loading questions...</p>
+                    </div>
+                </div>
+            </div>
+
+        <!-- Deployment Tab Content -->
+        <div id="deploymentTab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-bold text-primary mb-4">Deployment Options</h3>
+                <p class="text-medium mb-6">Choose how you want to deploy your survey to respondents.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <!-- PWA Card -->
+                    <div class="border border-secondary rounded-lg p-5 hover:shadow-md transition">
+                        <div class="flex items-center mb-4">
+                            <i class='bx bx-mobile-alt text-3xl text-primary'></i>
+                            <h4 class="text-lg font-semibold ml-3 text-dark">Progressive Web App</h4>
+                        </div>
+                        <p class="text-medium text-sm mb-4">Deploy as a Progressive Web App that works offline and can be installed on mobile devices.</p>
+                        <div id="pwaDeploymentStatus" class="mb-4">
+                            <span class="inline-block bg-light text-medium text-xs px-3 py-1 rounded-full">Not deployed</span>
+                        </div>
+                        <button id="deployPwaBtn" class="bg-primary text-light px-4 py-2 rounded-lg text-sm font-medium hover:bg-opacity-90 transition w-full flex items-center justify-center">
+                            <i class='bx bx-rocket mr-2'></i>
+                            Deploy as PWA
+                        </button>
+                    </div>
+                    
+                    <!-- Browser Card -->
+                    <div class="border border-secondary rounded-lg p-5 hover:shadow-md transition">
+                        <div class="flex items-center mb-4">
+                            <i class='bx bx-globe text-3xl text-primary'></i>
+                            <h4 class="text-lg font-semibold ml-3 text-dark">Voice-Bot</h4>
+                        </div>
+                        <p class="text-medium text-sm mb-4">Deploy as a web page accessible from any browser with a shareable link.</p>
+                        <div id="browserDeploymentStatus" class="mb-4">
+                            <span class="inline-block bg-light text-medium text-xs px-3 py-1 rounded-full">Not deployed</span>
+                        </div>
+                        <button id="deployBrowserBtn" class="bg-primary text-light px-4 py-2 rounded-lg text-sm font-medium hover:bg-opacity-90 transition w-full flex items-center justify-center">
+                            <i class='bx bx-link mr-2'></i>
+                            Deploy to Browser
+                        </button>
+                    </div>
+                    
+                    <!-- WhatsApp Card -->
+                    <div class="border border-secondary rounded-lg p-5 hover:shadow-md transition">
+                        <div class="flex items-center mb-4">
+                            <i class='bx bxl-whatsapp text-3xl text-primary'></i>
+                            <h4 class="text-lg font-semibold ml-3 text-dark">WhatsApp Flows</h4>
+                        </div>
+                        <p class="text-medium text-sm mb-4">Deploy as a WhatsApp Flow for easy sharing and responses via WhatsApp.</p>
+                        <div id="whatsappDeploymentStatus" class="mb-4">
+                            <span class="inline-block bg-light text-medium text-xs px-3 py-1 rounded-full">Not deployed</span>
+                        </div>
+                        <button id="deployWhatsappBtn" class="bg-primary text-light px-4 py-2 rounded-lg text-sm font-medium hover:bg-opacity-90 transition w-full flex items-center justify-center">
+                            <i class='bx bx-share-alt mr-2'></i>
+                            Deploy to WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Responses Tab Content -->
+        <div id="responsesTab" class="tab-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 class="text-lg font-bold text-primary mb-6">Survey Responses</h3>
+                
+                <!-- Empty state for responses -->
+                <div id="emptyResponses" class="text-center py-8">
+                    <i class='bx bx-file-blank text-5xl text-secondary mb-4'></i>
+                    <h4 class="text-lg font-semibold text-dark mb-2">No Responses Yet</h4>
+                    <p class="text-gray-600 mb-4">Deploy your survey to start collecting responses.</p>
+                </div>
+                
+                <!-- Response data will be loaded here -->
+                <div id="responseData" class="hidden">
+                    <!-- Response charts and tables would go here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Deployment Modal -->
+    <div id="deploymentModal" class="fixed inset-0 bg-dark bg-opacity-50 z-50 hidden">
+        <div class="absolute inset-0 flex items-center justify-center p-4" id="deploymentModalContent">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+                <div class="flex justify-between items-center mb-5">
+                    <h3 class="text-xl font-bold text-primary" id="deploymentModalTitle">Deploy Survey</h3>
+                    <button id="closeDeploymentModalBtn" class="text-medium hover:text-dark p-1">
+                        <i class='bx bx-x text-2xl'></i>
+                    </button>
+                </div>
+                
+                <div id="deploymentForm">
+                    <!-- Form content will be generated based on deployment type -->
+                </div>
+                
+                <div class="mt-6 flex justify-end">
+                    <button id="cancelDeploymentBtn" class="px-5 py-3 text-medium hover:text-dark font-medium mr-3">Cancel</button>
+                    <button id="confirmDeploymentBtn" class="bg-primary text-light px-5 py-3 rounded-lg font-medium hover:bg-opacity-90 transition flex items-center">
+                        <i class='bx bx-rocket mr-2'></i>
+                        Deploy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="fixed inset-0 bg-dark bg-opacity-50 z-50 hidden">
+        <div class="absolute inset-0 flex items-center justify-center p-4" id="successModalContent">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+                <div class="text-center">
+                    <div class="mx-auto flex items-center justify-center h-14 w-14 rounded-full bg-green-100 mb-5">
+                        <i class='bx bx-check text-3xl text-green-600'></i>
+                    </div>
+                    <h3 class="text-lg font-medium text-dark mb-3" id="successModalTitle">Survey Deployed!</h3>
+                    <div class="mt-2">
+                        <p class="text-medium" id="successModalMessage">
+                            Your survey has been successfully deployed.
+                        </p>
+                    </div>
+                    <div class="mt-5 bg-light p-4 rounded-lg">
+                        <p class="text-sm text-medium mb-2">Share this URL with respondents:</p>
+                        <div class="flex items-center">
+                            <input id="deploymentUrl" class="flex-grow border border-secondary rounded-l-lg px-3 py-2 text-sm bg-white" type="text" readonly>
+                            <button id="copyUrlBtn" class="bg-primary text-light px-4 py-2 rounded-r-lg text-sm hover:bg-opacity-90 flex items-center">
+                                <i class='bx bx-copy-alt mr-1'></i> Copy
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <button id="closeSuccessModalBtn" class="inline-flex justify-center w-full rounded-lg px-5 py-3 bg-primary text-base font-medium text-light hover:bg-opacity-90 focus:outline-none">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="../js/modal-helpers.js"></script>
+    <script src="../js/survey-details.js"></script>
+</body>
+</html>
