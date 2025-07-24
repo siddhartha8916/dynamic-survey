@@ -19,6 +19,18 @@ const EditSurvey: React.FC = () => {
 
   const survey = id ? getSurveyById(id) : null;
 
+  // Navigate to create questions page with existing survey data
+  React.useEffect(() => {
+    if (survey) {
+      const params = new URLSearchParams({
+        id: survey.id,
+        title: survey.title,
+        description: survey.description,
+      });
+      navigate(`/create-questions?${params.toString()}`);
+    }
+  }, [survey, navigate]);
+
   if (!survey) {
     return (
       <Box sx={{ flexGrow: 1 }}>
@@ -47,21 +59,6 @@ const EditSurvey: React.FC = () => {
       </Box>
     );
   }
-
-  // Navigate to create questions page with existing survey data
-  const handleEditQuestions = () => {
-    const params = new URLSearchParams({
-      id: survey.id,
-      title: survey.title,
-      description: survey.description,
-    });
-    navigate(`/create-questions?${params.toString()}`);
-  };
-
-  React.useEffect(() => {
-    // Immediately redirect to create questions page for editing
-    handleEditQuestions();
-  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
